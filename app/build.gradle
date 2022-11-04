@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+
     defaultConfig {
         applicationId "ms.appcenter.sampleapp.android"
         minSdkVersion 16
@@ -15,6 +16,7 @@ android {
         if (System.getenv("APPCENTER_APP_SECRET") != null) {
             buildConfigField("String", "APPCENTER_APP_SECRET", "\"${System.getenv("APPCENTER_APP_SECRET")}\"")
         }
+    }
 
     signingConfigs {
         release {
@@ -25,8 +27,7 @@ android {
             keyAlias "alias_name"
             keyPassword "dupadupa"
         }
-        
-    }
+
     buildTypes {
         release {
             minifyEnabled true
