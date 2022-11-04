@@ -1,6 +1,6 @@
 variables:
   system.debug: 'false'
-  lastCommitMessage: Update MainActivity.java
+  lastCommitMessage: poprawiony keystore
   pr.check.id: ''
   pr.status.id: ''
   MOBILECENTER_OUTPUT_DIRECTORY: $(Build.ArtifactStagingDirectory)/build
@@ -22,13 +22,16 @@ variables:
   runTests: 'false'
   runLint: 'false'
   keystoreEncoded: null
-  automaticSigning: 'false'
+  automaticSigning: 'true'
   buildBundle: 'false'
   MOBILECENTER_ANDROID_MODULE: app
   MOBILECENTER_ANDROID_VARIANT: release
   APPCENTER_ANDROID_MODULE: app
   APPCENTER_ANDROID_VARIANT: release
-  sonoma.tags: android
+  SONOMA_API_SERVER: 'https://api.appcenter.ms'
+  SONOMA_API_VERSION: v0.1
+  VSMobileCenterUpload.ContinueIfSymbolsNotFound: 'true'
+  sonoma.tags: 'android,signed,distribution'
 name: $(Build.BuildId)
 jobs:
   - job: Phase_1
@@ -130,3 +133,16 @@ jobs:
         inputs:
           PathtoPublish: $(build.artifactstagingdirectory)/mapping
           ArtifactName: mapping
+      - task: AppCenterDistribute@3
+        displayName: Create distribution
+        condition: 'and(succeeded(), ne(variables[''Build.Reason''], ''pullRequest''))'
+        inputs:
+          serverEndpoint: b39f5d00-055d-44b6-a4cf-8c04a32b6c10
+          appSlug: dany4-wp.pl/testapp
+          destinationGroupIds: 787f7232-f620-43fd-9d59-41a67ece6bc7
+          isSilent: false
+          releaseNotesInput: $(lastCommitMessage)
+          app: $(build.artifactstagingdirectory)/build/**/*.apk
+          symbolsType: Android
+          mappingTxtPath: $(build.artifactstagingdirectory)/mapping/**/mapping.txt
+          nativeLibrariesPath: $(build.sourcesdirectory)/**/*.so
