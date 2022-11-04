@@ -1,18 +1,18 @@
 variables:
   system.debug: 'false'
-  lastCommitMessage: poprawiony keystore
+  lastCommitMessage: Update azure-pipelines.yml
   pr.check.id: ''
   pr.status.id: ''
   MOBILECENTER_OUTPUT_DIRECTORY: $(Build.ArtifactStagingDirectory)/build
   MOBILECENTER_BRANCH: master
   MOBILECENTER_BUILD_ID: $(Build.BuildNumber)
   MOBILECENTER_SOURCE_DIRECTORY: $(Build.Repository.LocalPath)
-  MOBILECENTER_TRIGGER: manual
+  MOBILECENTER_TRIGGER: continuous
   APPCENTER_OUTPUT_DIRECTORY: $(Build.ArtifactStagingDirectory)/build
   APPCENTER_BRANCH: master
   APPCENTER_BUILD_ID: $(Build.BuildNumber)
   APPCENTER_SOURCE_DIRECTORY: $(Build.Repository.LocalPath)
-  APPCENTER_TRIGGER: manual
+  APPCENTER_TRIGGER: continuous
   artifactVersioning.build.format: buildId
   buildScripts.toolset: >-
     {"app":{"postBuild":"app/appcenter-post-build.sh","postClone":"app/appcenter-post-clone.sh","preBuild":"app/appcenter-pre-build.sh"}}
@@ -31,8 +31,13 @@ variables:
   SONOMA_API_SERVER: 'https://api.appcenter.ms'
   SONOMA_API_VERSION: v0.1
   VSMobileCenterUpload.ContinueIfSymbolsNotFound: 'true'
-  sonoma.tags: 'android,signed,distribution'
+  sonoma.tags: 'continuous,android,signed,distribution'
 name: $(Build.BuildId)
+resources:
+  repositories:
+    - repository: self
+      type: git
+      ref: master
 jobs:
   - job: Phase_1
     displayName: Build
@@ -133,7 +138,6 @@ jobs:
         inputs:
           PathtoPublish: $(build.artifactstagingdirectory)/mapping
           ArtifactName: mapping
-
       - task: AppCenterDistribute@3
         displayName: Create distribution
         condition: 'and(succeeded(), ne(variables[''Build.Reason''], ''pullRequest''))'
@@ -147,4 +151,3 @@ jobs:
           symbolsType: Android
           mappingTxtPath: $(build.artifactstagingdirectory)/mapping/**/mapping.txt
           nativeLibrariesPath: $(build.sourcesdirectory)/**/*.so
-          
