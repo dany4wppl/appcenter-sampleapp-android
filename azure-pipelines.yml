@@ -142,11 +142,11 @@ jobs:
         displayName: Create distribution
         condition: 'and(succeeded(), ne(variables[''Build.Reason''], ''pullRequest''))'
         inputs:
-          serverEndpoint: 93dab422-e7b2-4ee6-abc4-4a049f3f7b70
+          serverEndpoint: 'App Center C061302'
           appSlug: dwtests/dwtestapp
-          destinationGroupIds: 211a18e5-b841-48b4-b374-49519fe05af3
+          #destinationGroupIds: 211a18e5-b841-48b4-b374-49519fe05af3
           isSilent: false
-          releaseNotesInput: $(lastCommitMessage)
+          releaseNotesInput: Daniel - $(lastCommitMessage)
           app: $(build.artifactstagingdirectory)/build/**/*.apk
           symbolsType: Android
           mappingTxtPath: $(build.artifactstagingdirectory)/mapping/**/mapping.txt
