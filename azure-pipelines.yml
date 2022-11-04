@@ -144,7 +144,7 @@ jobs:
         inputs:
           serverEndpoint: 'App Center C061302'
           appSlug: dwtests/dwtestapp
-          #destinationGroupIds: 211a18e5-b841-48b4-b374-49519fe05af3
+          destinationGroupIds: 211a18e5-b841-48b4-b374-49519fe05af3
           isSilent: false
           releaseNotesInput: Daniel - $(lastCommitMessage)
           app: $(build.artifactstagingdirectory)/build/**/*.apk
