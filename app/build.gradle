@@ -27,6 +27,7 @@ android {
             keyAlias "alias_name"
             keyPassword "dupadupa"
         }
+    }
 
     buildTypes {
         release {
